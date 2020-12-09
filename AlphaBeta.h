@@ -1,3 +1,35 @@
+/*
+ * This file is part of the alphabeta library
+ * Usage: A template library for the implementation
+ *        of alpha beta gamma filters for arduino/teensy
+ * Version 1.0
+ * Developed by Evan https://github.com/halsw
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * Classes:
+ *  GFilter the alpha filter
+ *  GHFilter the alpha beta filter
+ *  GHKFilter the alpha beta gamma filter
+ *  
+ *  Types:
+ *    GFState a designator to the state variables of the filters
+ *    
+ *  Defines:
+ *   GFSQRT(x) the square root function 
+ *   GFCBRT(x) the cubic root function
+ *   GF_ACCURACY the accuracy of root calculations if not performed by the above functions
+ */
 #ifndef ALPHABETA_H
 #define ALPHABETA_H
 //#define GF_ACCURACY 0.00001
