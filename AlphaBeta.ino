@@ -55,12 +55,12 @@ void loop() {
   static unsigned long sample = 1;
   double actual, measure, recover, error, accumulate;
   int load;
-  t += PERIOD_MS/1000.0;
-  actual = a*sin(w*t);
-  measure = actual + (NOISE_MEASURE*random(LONG_MAX))/LONG_MAX;
-  load = wait()>>8;
-  recover = filter.update(measure);
-  error = recover - actual - mean;
+  t += PERIOD_MS/1000.0; //update simulation time
+  actual = a*sin(w*t); //Generate fast changing sine wave (1/10 the period of sampling)
+  load = wait()>>8; //Sample at exact intervals
+  measure = actual + (NOISE_MEASURE*random(LONG_MAX))/LONG_MAX; //Add noise to measurement
+  recover = filter.update(measure); // apply filter
+  error = recover - actual - mean; // calculate mean and variance of error
   accumulate = error / sample;
   if (sample>1) variance -= variance / ( sample - 1);
   variance += error * accumulate;
