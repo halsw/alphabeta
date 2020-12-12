@@ -56,7 +56,7 @@ void loop() {
   double actual, measure, recover, error, accumulate;
   int load;
   t += PERIOD_MS/1000.0; //update simulation time
-  actual = a*sin(w*t); //Generate fast changing sine wave (1/10 the period of sampling)
+  actual = a*sin(w*t); //Generate fast changing sine wave (x10 the period of sampling)
   load = wait()>>8; //Sample at exact intervals
   measure = actual + (NOISE_MEASURE*random(LONG_MAX))/LONG_MAX; //Add noise to measurement
   recover = filter.update(measure); // apply filter
