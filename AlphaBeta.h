@@ -2,6 +2,8 @@
  * This file is part of the alphabeta library
  * Usage: A template library for the implementation
  *        of alpha beta gamma filters for arduino/teensy
+ * Dependencies: MathFixed lbrary (https://github.com/halsw/MathFixed)       
+ * 
  * Version 1.0
  * Developed by Evan https://github.com/halsw
  *
@@ -24,60 +26,18 @@
  *  
  *  Types:
  *    GFState a designator to the state variables of the filters
- *    
- *  Defines:
- *   GFSQRT(x) the square root function 
- *   GFCBRT(x) the cubic root function
- *   GF_ACCURACY the accuracy of root calculations if not performed by the above functions
  */
+#include "MathFixed.h"
+
 #ifndef ALPHABETA_H
 #define ALPHABETA_H
-//#define GF_ACCURACY 0.00001
-//if GF_ACCURACY is defined then square & cubic root are calculated within this accuracy for datatypes not supported 
-//by Arduino builtin functions defined below, which can also be overriden
-#define GFSQRT(x) sqrt(x)
-#define GFCBRT(x) pow((x),0.3333333333333333)
+
 enum GFState
 {
     GFDisplacement = 0,
     GFVelocity = 1,
     GFAcceleration = 2
 };
-
-template <class GF>
-#ifdef GF_ACCURACY
-  GF gfsqrt (GF x) {
-    GF r, e, t;  
-    r = 0.5*x;
-    do {
-      t = x / r;
-      e = t - x;
-      if (e<0) e=-e;
-      r = (r + t) / 2.0; 
-    } while (e>GF_ACCURACY);
-    return(r);
-};
-#else
-  inline GF gfsqrt (GF x) { return(GFSQRT(x)); };
-#endif
-
-template <class GF>
-#ifdef GF_ACCURACY
-  GF gfcbrt (GF x) {
-    GF r, e, t;  
-    r = x / 3.0;
-    do {
-      t = (x / r) / r;
-      e = t - x;
-      if (e<0) e=-e;
-      r = (2.0*r + t) / 3.0; 
-    } while (e>GF_ACCURACY);
-    return(r);
-};
-#else
-  inline GF gfcbrt (GF x) { return(GFCBRT(x)); };
-#endif
-
 
 template <class GF>
 class GFilter {
@@ -93,7 +53,7 @@ class GFilter {
       GF v;
       v =  this->nP / this->nM * this->dt * this->dt;
       v *= v;
-      this->g = (gfsqrt(v*(v+16.0))-v)/8.0;
+      this->g = (fxsqrt(v*(v+16.0))-v)/8.0;
     }
   public:
     GFilter (GF processDev, GF noiseDev, GF period, GF x0 = 0.0) {
@@ -127,7 +87,7 @@ class GFilter {
       this->nP = n;
     }    
     inline void setProcessVAR( GF n ) {
-      setProcessDEV(gfsqrt(n));
+      setProcessDEV(fxsqrt(n));
     }    
     inline GF getProcessDEV() {
       return(this->nP);
@@ -139,7 +99,7 @@ class GFilter {
       this->nM = n;
     }    
     inline void setMeasurementVAR( GF n ) {
-      setMeasurementDEV(gfsqrt(n));
+      setMeasurementDEV(fxsqrt(n));
     }    
     inline GF getMeasurementDEV() {
       return(this->nM);
@@ -171,9 +131,9 @@ class GHFilter: public GFilter<GF> {
     virtual void coefs() {
       GF v;  
       v =  this->nP / this->nM * this->dt * this->dt;
-      v = 1.0 + (v - gfsqrt(v*(8.0+v)))/4.0;
+      v = 1.0 + (v - fxsqrt(v*(8.0+v)))/4.0;
       this->g = 1.0 - v*v;
-      this->h = 2.0*(2.0 - this->g)-4.0*gfsqrt(1.0-this->g);
+      this->h = 2.0*(2.0 - this->g)-4.0*fxsqrt(1.0-this->g);
     }
   public:
     GHFilter (GF processDev, GF noiseDev, GF period, GF x0 = 0.0, GF v0 = 0.0) : GFilter<GF>(processDev, noiseDev, 0, x0) {
@@ -206,8 +166,8 @@ class GHKFilter: public GHFilter<GF> {
       this->k = this->g + 6.0; //c = l/2.0 + 3.0
       this->h = this->k - this->g*this->g/3.0; //p = c - sq(b)/3.0
       this->k = this->g*(this->g*this->g*(2.0/27.0) - this->k/3.0) - 1.0; //q = b*sq(b)*(2.0/27.0) - b*c/3.0 - 1
-      v = gfsqrt(this->k*this->k + this->h*this->h*this->h*(4.0/27.0)); //v = sqrt(sq(q) + p*sq(p)*(4.0/27.0))
-      v = -gfcbrt(this->k + v/2.0); //z = -pow(q + v/2.0, 0.33333333333333333333333)
+      v = fxsqrt(this->k*this->k + this->h*this->h*this->h*(4.0/27.0)); //v = sqrt(sq(q) + p*sq(p)*(4.0/27.0))
+      v = -fxcbrt(this->k + v/2.0); //z = -pow(q + v/2.0, 0.33333333333333333333333)
       v -= (this->h/v + this->g)/3.0; //s = z - p/(3.0*z) - b/3.0;
       this->g = 1.0 - v*v; //g = 1.0 - sq(s);
       v = 1.0 - v;

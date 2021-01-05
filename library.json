@@ -1,0 +1,22 @@
+{
+  "name": "AlphaBeta",
+  "description": "A template library for the implementation of alpha beta gamma filters",
+  "keywords": "alpha, beta, gamma, filter, alpha-beta filter, sensors, tracking, Kalman",
+  "authors":
+  {
+    "name": "Evan",
+    "url": "https://github.com/halsw"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/halsw/alphabeta.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "version": "1.1.0",
+  "frameworks": "arduino",
+  "dependencies":
+  {
+    "halsw/MathFixed": "*"
+  }
+}
