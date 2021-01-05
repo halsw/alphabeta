@@ -4,7 +4,7 @@
  *        of alpha beta gamma filters for arduino/teensy
  * Dependencies: MathFixed lbrary (https://github.com/halsw/MathFixed)       
  * 
- * Version 1.0
+ * Version 1.1.0
  * Developed by Evan https://github.com/halsw
  *
  * This program is free software: you can redistribute it and/or modify

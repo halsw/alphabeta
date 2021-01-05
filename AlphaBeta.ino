@@ -2,7 +2,7 @@
  * This file is part of the alphabeta library
  * Usage: Provide an example use of the library
  * 
- * Version 1.0
+ * Version 1.1.0
  * Developed by Evan https://github.com/halsw
  *
  * This program is free software: you can redistribute it and/or modify
@@ -70,6 +70,7 @@ void loop() {
     Serial.print(sqrt(variance),4);
     Serial.print(" load:");
     Serial.print(load);
+    Serial.print(" ");
     Serial.println("%");
   }
 }
