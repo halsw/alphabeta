@@ -1,4 +1,4 @@
-# Alpha Beta Filters for Arduino and Teensy
+# [Alpha Beta Filters](https://github.com/halsw/alphabeta) for Arduino and Teensy
 A library with template classes for the α(G), α-β(GH) and α-β-γ(GHK) filters
 
 The α-β-γ filters are quite useful because of their fast execution and low memory usage that make them valuable for real time applications needing accurate estimates from noisy readings. To implement the alpha filter in a class it may seem an overkill but it provides an easy way to experiment with different filters and types to find the best suited for an application.
