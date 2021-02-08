@@ -4,7 +4,7 @@
  *        of alpha beta gamma filters for arduino/teensy
  * Dependencies: MathFixed lbrary (https://github.com/halsw/MathFixed)       
  * 
- * Version 1.1.0
+ * Version 1.1.1
  * Developed by Evan https://github.com/halsw
  *
  * This program is free software: you can redistribute it and/or modify
@@ -74,7 +74,7 @@ class GFilter {
       this->err = measure - this->x[GFDisplacement];
       return(this->x[GFDisplacement] += this->g*err);
     }    
-    inline void setState( GF x, GFState s) {
+    inline void setState( GF x, GFState s = GFDisplacement) {
       this->x[s] = x;
     }    
     inline GF getState(GFState s = GFDisplacement) {
@@ -121,7 +121,15 @@ class GFilter {
     virtual GF getCoef(GFState s = GFDisplacement) {
       return s == GFDisplacement?this->g:0;
     }    
-  };
+
+    inline virtual void getCoefs(GF* c ) {
+      c[0] = this->g;
+    }    
+
+    inline virtual void setCoefs(GF* c ) {
+      this->g = c[0];
+    }    
+};
 
 
 template <class GF>
@@ -153,6 +161,14 @@ class GHFilter: public GFilter<GF> {
     virtual GF getCoef(GFState s = GFDisplacement) {
       return s == GFVelocity?this->h:GFilter<GF>::getCoef(s);
     }        
+
+    inline virtual void getCoefs(GF* c ) {
+      memcpy(c, &this->g, sizeof(GF)<<1);
+    }    
+
+    inline virtual void setCoefs(GF* c ) {
+      memcpy(&this->g, c, sizeof(GF)<<1);
+    }    
 };
 
 template <class GF>
@@ -195,5 +211,13 @@ class GHKFilter: public GHFilter<GF> {
     virtual GF getCoef(GFState s = GFDisplacement) {
       return s == GFAcceleration?this->k:GHFilter<GF>::getCoef(s);
     }        
+
+    inline virtual void getCoefs(GF* c ) {
+      memcpy(c, &this->g, 3*sizeof(GF));
+    }    
+
+    inline virtual void setCoefs(GF* c ) {
+      memcpy(&this->g, c, 3*sizeof(GF));
+    }    
 };
 #endif

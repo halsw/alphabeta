@@ -17,6 +17,8 @@ getMeasurementVAR	KEYWORD2
 setPeriod	KEYWORD2
 getPeriod	KEYWORD2
 getCoef	KEYWORD2
+getCoefs	KEYWORD2
+setCoefs	KEYWORD2
 GFDisplacement	LITERAL1
 GFVelocity	LITERAL1
 GFAcceleration	LITERAL1
